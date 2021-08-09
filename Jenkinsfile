@@ -1,4 +1,4 @@
-def dockerRun = "sudo docker run -it -p 95:80 -d --name HCL-Hack42 chika1984/myapp:21.4.2"
+def dockerRun = "sudo docker run -it -p 82:80 -d --name HCL-Hack25 chika1984/myapp:25.1.0"
 pipeline {
   agent any
     tools {
@@ -14,13 +14,13 @@ pipeline {
                     '''
             }
         }
-		//stage ('SonarQube Analysis') {
-	      //steps {
-		  //withSonarQubeEnv('sonar-1') {
-		  //sh "/usr/share/maven/bin/mvn sonar:sonar"
-		  //}
-        //}       
-       //}
+		stage ('SonarQube Analysis') {
+	      steps {
+		  withSonarQubeEnv('sonar-2') {
+		  sh "/usr/share/maven/bin/mvn sonar:sonar"
+		  }
+        }       
+       }
         stage ('Build Maven') {
             steps {
                 //sh 'mvn -Dmaven.test.failure.ignore=true install' 
@@ -32,7 +32,7 @@ pipeline {
 		  agent { label 'master' }
 		  	  
          steps {
-			sh 'docker build -t chika1984/myapp:21.4.2 .'
+			sh 'docker build -t chika1984/myapp:25.1.0 .'
 
 			}
 		}	
@@ -43,13 +43,13 @@ pipeline {
 			withCredentials([string(credentialsId: 'DockerHub-Login', variable: 'DockerHubPwd')]) {
             sh "docker login -u chika1984 -p ${DockerHubPwd}"
 			}
-			sh 'docker push chika1984/myapp:21.4.2'
+			sh 'docker push chika1984/myapp:25.1.0'
 		} 	
 		}
 		 stage('Run Docker image on HCL-Hack Server') {
 		 steps {
-		    sshagent(['HCL-CodeHack']){ 
-			sh "ssh -o StrictHostKeyChecking=no ubuntu@13.233.151.145 ${dockerRun}"		 
+		    sshagent(['HCL-Hack-Code']){ 
+			sh "ssh -o StrictHostKeyChecking=no ubuntu@65.1.110.54 ${dockerRun}"		 
 		 }
         
 }
