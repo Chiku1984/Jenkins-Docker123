@@ -1,4 +1,4 @@
-def dockerRun = "sudo docker run -it -p 8585:80 -d --name HCL-Hack85 chika1984/myapp:85.1.0"
+def dockerRun = "sudo docker run -it -p 8096:80 -d --name HCL-Hack96 chika1984/myapp:96.1.0"
 pipeline {
   agent any
     tools {
@@ -32,7 +32,7 @@ pipeline {
 		  agent { label 'master' }
 		  	  
          steps {
-			sh 'docker build -t chika1984/myapp:85.1.0 .'
+			sh 'docker build -t chika1984/myapp:96.1.0 .'
 
 			}
 		}	
@@ -43,7 +43,7 @@ pipeline {
 			withCredentials([string(credentialsId: 'DockerHub-Login', variable: 'DockerHubPwd')]) {
             sh "docker login -u chika1984 -p ${DockerHubPwd}"
 			}
-			sh 'docker push chika1984/myapp:85.1.0'
+			sh 'docker push chika1984/myapp:96.1.0'
 		} 	
 		}
 		 stage('Run Docker image on HCL-Hack Server') {

@@ -9,5 +9,5 @@ RUN apt-get update && \
     cp wkhtmltox/bin/wk* /usr/local/bin/ && \
     cp wkhtmltox/lib/* /usr/local/lib/ && \
     rm wkhtmltox-${WKHTML_VERSION}_linux-generic-amd64.tar.xz
-COPY   . target/*.jar /usr/local/tomcat/webapps/webapp.jar
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","webapp.jar"]
+COPY   . target/*.jar /usr/local/tomcat/webapps/*.jar
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","*.jar"]
