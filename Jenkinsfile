@@ -1,4 +1,4 @@
-def dockerRun = "sudo docker run -it -p 8096:80 -d --name HCL-Hack96 chika1984/myapp:96.1.0"
+def dockerRun = "sudo docker run -it -p 8080:8080 -d --name HCL-Hack8080 chika1984/myapp:80.1.0"
 pipeline {
   agent any
     tools {
@@ -21,6 +21,13 @@ pipeline {
 		  }
         }       
        }
+	   stage("SonarQube Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }
         stage ('Build Maven') {
             steps {
                 //sh 'mvn -Dmaven.test.failure.ignore=true install' 
@@ -32,7 +39,7 @@ pipeline {
 		  agent { label 'master' }
 		  	  
          steps {
-			sh 'docker build -t chika1984/myapp:96.1.0 .'
+			sh 'docker build -t chika1984/myapp:80.1.0 .'
 
 			}
 		}	
@@ -43,7 +50,7 @@ pipeline {
 			withCredentials([string(credentialsId: 'DockerHub-Login', variable: 'DockerHubPwd')]) {
             sh "docker login -u chika1984 -p ${DockerHubPwd}"
 			}
-			sh 'docker push chika1984/myapp:96.1.0'
+			sh 'docker push chika1984/myapp:80.1.0'
 		} 	
 		}
 		 stage('Run Docker image on HCL-Hack Server') {
