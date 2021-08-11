@@ -21,13 +21,13 @@ pipeline {
 		  }
         }       
        }
-	   stage("SonarQube Quality Gate") {
-            steps {
-              timeout(time: 1, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
+	   //stage("SonarQube Quality Gate") {
+           // steps {
+             // timeout(time: 1, unit: 'MINUTES') {
+               // waitForQualityGate abortPipeline: true
+              //}
+            //}
+          //}
         stage ('Build Maven') {
             steps {
                 //sh 'mvn -Dmaven.test.failure.ignore=true install' 
