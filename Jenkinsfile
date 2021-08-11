@@ -32,7 +32,7 @@ pipeline {
             steps {
                 //sh 'mvn -Dmaven.test.failure.ignore=true install' 
 				//def mvnHome = tool name: 'maven', type 'maven'
-				sh 'mvn clean test'
+				sh 'mvn clean package'
             }
           }	   
         stage('Build Docker image') {
